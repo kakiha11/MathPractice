@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Practice - Earn Your Badges!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🧮 Math Practice</h1>
+            <div class="score-display">
+                <span class="score">Score: <span id="score">0</span></span>
+                <span class="streak">Streak: <span id="streak">0</span></span>
+            </div>
+        </header>
+
+        <!-- Badges Section -->
+        <section class="badges-section">
+            <h2>🏆 Your Badges</h2>
+            <div class="badges-container">
+                <div class="badge locked" data-badge="first-correct">
+                    <div class="badge-icon">🎯</div>
+                    <div class="badge-name">First Correct</div>
+                    <div class="badge-description">Answer your first problem correctly</div>
+                </div>
+                <div class="badge locked" data-badge="easy-master">
+                    <div class="badge-icon">🟢</div>
+                    <div class="badge-name">Easy Master</div>
+                    <div class="badge-description">Get 3 easy problems correct</div>
+                </div>
+                <div class="badge locked" data-badge="medium-master">
+                    <div class="badge-icon">🟡</div>
+                    <div class="badge-name">Medium Master</div>
+                    <div class="badge-description">Get 3 medium problems correct</div>
+                </div>
+                <div class="badge locked" data-badge="hard-master">
+                    <div class="badge-icon">🔴</div>
+                    <div class="badge-name">Hard Master</div>
+                    <div class="badge-description">Get 3 hard problems correct</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Section -->
+        <section class="problem-section">
+            <div class="problem-card">
+                <div class="problem-display">
+                    <span class="problem-text" id="problem">7 + 5 = ?</span>
+                </div>
+                <div class="answer-section">
+                    <input type="number" id="answer-input" placeholder="Enter your answer" class="answer-input">
+                    <button class="submit-btn" id="submit-btn">Submit</button>
+                </div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </section>
+
+        <!-- Controls -->
+        <section class="controls">
+            <button class="control-btn" id="new-problem-btn">New Problem</button>
+            <div class="difficulty-selector">
+                <label for="difficulty">Difficulty:</label>
+                <select id="difficulty" class="difficulty-select">
+                    <option value="easy">Easy (1-10)</option>
+                    <option value="medium">Medium (1-50)</option>
+                    <option value="hard">Hard (1-100)</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <h3>📊 Your Stats</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="total-problems">0</div>
+                    <div class="stat-label">Problems Solved</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="correct-answers">0</div>
+                    <div class="stat-label">Correct Answers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="badges-earned">0</div>
+                    <div class="stat-label">Badges Earned</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Badge Notification -->
+    <div class="badge-notification" id="badge-notification">
+        <div class="notification-content">
+            <div class="notification-icon">🎉</div>
+            <div class="notification-text">
+                <div class="notification-title">Badge Earned!</div>
+                <div class="notification-badge-name" id="notification-badge-name"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
