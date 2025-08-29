@@ -7,6 +7,7 @@ let score = 0;
 let streak = 0;
 let totalProblems = 0;
 let correctAnswers = 0;
+let accuracy = 0;
 let currentAnswer = 0;
 let difficulty = 'easy';
 
@@ -15,6 +16,7 @@ let firstCorrectEarned = false;
 let easyProblemsCorrect = 0;
 let mediumProblemsCorrect = 0;
 let hardProblemsCorrect = 0;
+let notificationTimer;
 
 // ========== FUNCTIONS ==========
 
@@ -71,15 +73,27 @@ function updateScore(isCorrect) {
     // If answer is wrong: reset streak
     // Update the display
     // Check for new badges
+    totalProblems += 1;
     if(isCorrect) {
         correctAnswers += 1;
         streak += 1;
+        if(!firstCorrectEarned) {
+            firstCorrectEarned = true;
+        }
+        if(difficulty === 'easy' && easyProblemsCorrect < 3) {
+            easyProblemsCorrect += 1;
+        }
+        if(difficulty === 'medium' && mediumProblemsCorrect < 3) {
+            mediumProblemsCorrect += 1;
+        }
+        if(difficulty === 'hard' && hardProblemsCorrect < 3) {
+            hardProblemsCorrect += 1;
+        }
+        checkBadges();
     } else {
         streak = 0;
     }
     updateDisplay();
-    console.log('Score: ' + correctAnswers);
-    console.log('Streak: ' + streak);
     
 }
 
@@ -91,6 +105,18 @@ function checkBadges() {
     // - Easy Master: easyProblemsCorrect >= 3
     // - Medium Master: mediumProblemsCorrect >= 3  
     // - Hard Master: hardProblemsCorrect >= 3
+    if(firstCorrectEarned) {
+        unlockBadge('first-correct');
+    }
+    if(easyProblemsCorrect >= 3) {
+        unlockBadge('easy-master');
+    }
+    if(mediumProblemsCorrect >= 3) {
+        unlockBadge('medium-master');
+    }
+    if(hardProblemsCorrect >= 3) {
+        unlockBadge('hard-master');
+    }
 }
 
 // Function to unlock a specific badge
@@ -99,6 +125,17 @@ function unlockBadge(badgeId) {
     // Remove the 'locked' class from the badge
     // Add the 'earned' class to the badge
     // Show the badge notification
+    let badge = document.getElementById(badgeId);
+    badge.classList.remove('locked');
+    badge.classList.add('earned');
+    //show the badge notification
+    let notification = document.getElementById('badge-notification');
+    notification.classList.add('show');
+    document.getElementById('notification-badge-name').textContent = badge.querySelector('.badge-name').textContent;
+    clearTimeout(notificationTimer); // Clear any existing timer
+notificationTimer = setTimeout(() => {
+    notification.classList.remove('show');
+}, 3000);
 }
 
 // Function to update all the numbers and text on the webpage
@@ -107,8 +144,10 @@ function updateDisplay() {
     // Update score, streak, total problems, correct answers
     // Update accuracy percentage
     // Update badges earned count
-    totalProblems += 1;
-    accuracy = (correctAnswers / totalProblems) * 100;
+    
+    if(totalProblems > 0) {
+        accuracy = Math.round((correctAnswers / totalProblems) * 100);
+    }
 
     //document.getElementById('score').textContent = score;
     document.getElementById('streak').textContent = streak;
@@ -117,6 +156,7 @@ function updateDisplay() {
     document.getElementById('accuracy').textContent = accuracy;
     //document.getElementById('badges-earned').textContent = badgesEarned;
     generateNewProblem();
+    document.getElementById('submit-btn').disabled = false;  // Re-enable the submit button
 }
 
 // Function to change the difficulty level
@@ -146,11 +186,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // When user presses Enter in the answer input, check answer
-    // document.getElementById('answer-input').addEventListener('keypress', function(event) {
-    //     if (event.key === 'Enter') {
-    //         checkAnswer();
-    //     }
-    // });
+    document.getElementById('answer-input').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            checkAnswer();
+        }
+    });
     
     // Start the app by generating the first problem
     generateNewProblem();
