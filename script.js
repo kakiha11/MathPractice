@@ -17,6 +17,7 @@ let easyProblemsCorrect = 0;
 let mediumProblemsCorrect = 0;
 let hardProblemsCorrect = 0;
 let notificationTimer;
+let badgesEarned = 0;
 
 // ========== FUNCTIONS ==========
 
@@ -80,14 +81,23 @@ function updateScore(isCorrect) {
         if(!firstCorrectEarned) {
             firstCorrectEarned = true;
         }
-        if(difficulty === 'easy' && easyProblemsCorrect < 3) {
-            easyProblemsCorrect += 1;
+        if(difficulty === 'easy') {
+            score += 1;
+            if(easyProblemsCorrect < 3) {
+                easyProblemsCorrect += 1;
+            }
         }
-        if(difficulty === 'medium' && mediumProblemsCorrect < 3) {
-            mediumProblemsCorrect += 1;
+        if(difficulty === 'medium') {
+            score += 2;
+            if(mediumProblemsCorrect < 3) {
+                mediumProblemsCorrect += 1;
+            }
         }
-        if(difficulty === 'hard' && hardProblemsCorrect < 3) {
-            hardProblemsCorrect += 1;
+        if(difficulty === 'hard') {
+            score += 3;
+            if(hardProblemsCorrect < 3) {
+                hardProblemsCorrect += 1;
+            }
         }
         checkBadges();
     } else {
@@ -105,6 +115,7 @@ function checkBadges() {
     // - Easy Master: easyProblemsCorrect >= 3
     // - Medium Master: mediumProblemsCorrect >= 3  
     // - Hard Master: hardProblemsCorrect >= 3
+    // - Score Master: score >= 10
     if(firstCorrectEarned) {
         unlockBadge('first-correct');
     }
@@ -117,6 +128,9 @@ function checkBadges() {
     if(hardProblemsCorrect >= 3) {
         unlockBadge('hard-master');
     }
+    if(score >= 10) {
+        unlockBadge('score-master');
+    }
 }
 
 // Function to unlock a specific badge
@@ -126,16 +140,19 @@ function unlockBadge(badgeId) {
     // Add the 'earned' class to the badge
     // Show the badge notification
     let badge = document.getElementById(badgeId);
-    badge.classList.remove('locked');
-    badge.classList.add('earned');
-    //show the badge notification
-    let notification = document.getElementById('badge-notification');
-    notification.classList.add('show');
-    document.getElementById('notification-badge-name').textContent = badge.querySelector('.badge-name').textContent;
-    clearTimeout(notificationTimer); // Clear any existing timer
-notificationTimer = setTimeout(() => {
-    notification.classList.remove('show');
-}, 3000);
+    if (badge.classList.contains('locked')) {
+        badgesEarned += 1;
+        badge.classList.remove('locked');
+        badge.classList.add('earned');
+        //show the badge notification
+        let notification = document.getElementById('badge-notification');
+        notification.classList.add('show');
+        document.getElementById('notification-badge-name').textContent = badge.querySelector('.badge-name').textContent;
+        clearTimeout(notificationTimer); // Clear any existing timer
+    notificationTimer = setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
+    }
 }
 
 // Function to update all the numbers and text on the webpage
@@ -149,12 +166,12 @@ function updateDisplay() {
         accuracy = Math.round((correctAnswers / totalProblems) * 100);
     }
 
-    //document.getElementById('score').textContent = score;
+    document.getElementById('score').textContent = score;
     document.getElementById('streak').textContent = streak;
     document.getElementById('total-problems').textContent = totalProblems;
     document.getElementById('correct-answers').textContent = correctAnswers;
     document.getElementById('accuracy').textContent = accuracy;
-    //document.getElementById('badges-earned').textContent = badgesEarned;
+    document.getElementById('badges-earned').textContent = badgesEarned;
     generateNewProblem();
     document.getElementById('submit-btn').disabled = false;  // Re-enable the submit button
 }
